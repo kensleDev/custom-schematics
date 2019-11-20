@@ -1,0 +1,24 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "id": "SchematicsNme",
+  "title": "Nest Mongo Endpoint Schema",
+  "type": "object",
+  "properties": {
+    "featureName": {
+      "type": "string",
+      "description": "Feature Name",
+      "x-prompt": "Name of new feature?"
+    },
+    "schema": {
+      "type": "string",
+      "description": "Schema Definition",
+      "x-prompt": "List of property names with type (e.g. name: string, amount: number ....)"
+    },
+    "crudOps": {
+      "type": "string",
+      "description": "CRUD Operations",
+      "x-prompt": "Which of the following operations? (all || comma seperated list) e.g. create, get, list, update, delete, query, getLatest "
+    }
+  },
+  "required": ["featureName", "schema"]
+}
