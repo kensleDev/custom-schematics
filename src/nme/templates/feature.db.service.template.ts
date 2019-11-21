@@ -14,11 +14,10 @@ export const featureDbServiceTemplate = (featureName: string, featureNameUpper: 
     getLatest: getLatest()
   }
 
-  const opts = () => {
-    return crudOpsArr.map((op: CrudType) => {
-      return `${fnMap[op]}`
-    }).join('\n');
-  }
+  const opts = crudOpsArr.map((op: CrudType) => {
+    return `${fnMap[op]}`
+  }).join('\n');
+
 
   const body =
     crudOps === "all"
@@ -35,58 +34,64 @@ export const featureDbServiceTemplate = (featureName: string, featureNameUpper: 
   // funcs
 
   function create() {
-    return `async create(entry: ${featureNameUpper}) {
-      const newEntry = new this.domainModal(entry);
-      return await newEntry.save();
-    }`
+    return `
+      async create(entry: ${featureNameUpper}) {
+        const newEntry = new this.domainModal(entry);
+        return await newEntry.save();
+      }`
   }
 
   function get() {
-    return `async get(id): Promise<${featureNameUpper}> {
-      const entry = await this.domainModal.findById(id).exec();
-      return entry;
-    }`
+    return `
+      async get(id): Promise<${featureNameUpper}> {
+        const entry = await this.domainModal.findById(id).exec();
+        return entry;
+      }`
   }
 
   function list() {
-    return `async list(): Promise<${featureNameUpper}[] | null> {
-      return await this.domainModal.find().exec();
-    }`
+    return `
+      async list(): Promise<${featureNameUpper}[] | null> {
+        return await this.domainModal.find().exec();
+      }`
   }
 
   function update()  {
-    return `async update(id, entry: ${featureNameUpper}): Promise<${featureNameUpper}> {
-      const updatedEntry = await this.domainModal.findByIdAndUpdate(
-        id,
-        entry,
-        { new: true },
-      );
-      return updatedEntry;
-    }`
+    return `
+      async update(id, entry: ${featureNameUpper}): Promise<${featureNameUpper}> {
+        const updatedEntry = await this.domainModal.findByIdAndUpdate(
+          id,
+          entry,
+          { new: true },
+        );
+        return updatedEntry;
+      }`
   }
 
   function remove() {
-    return `async delete(id): Promise<any> {
-      const deletedEntry = await this.domainModal.findOneAndDelete(id);
-      return deletedEntry;
-    }`
+    return `
+      async delete(id): Promise<any> {
+        const deletedEntry = await this.domainModal.findOneAndDelete(id);
+        return deletedEntry;
+      }`
   }
 
   function query() {
-    `async query(mongoQuery, sortFilter, limitFilter?): Promise<${featureNameUpper}[] | null> {
-      if (limitFilter) {
-        return await this.domainModal.find(mongoQuery).sort(sortFilter).limit(limitFilter).exec();
-      else {
-        return await this.domainModal.find(mongoQuery).sort(sortFilter).exec();
-      }
-    }`
+    return `
+      async query(mongoQuery, sortFilter, limitFilter?): Promise<${featureNameUpper}[] | null> {
+        if (limitFilter) {
+          return await this.domainModal.find(mongoQuery).sort(sortFilter).limit(limitFilter).exec();
+        } else {
+          return await this.domainModal.find(mongoQuery).sort(sortFilter).exec();
+        }
+      }`
   }
 
   function getLatest() {
-   return `
-    async getLatest(): Promise<${featureNameUpper}[] | null> {
-      return await this.domainModal.find({}).sort({_id: -1}).limit(1).exec();
-    }`;
+    return `
+      async getLatest(): Promise<${featureNameUpper}[] | null> {
+        return await this.domainModal.find({}).sort({_id: -1}).limit(1).exec();
+      }`;
   }
 
   // template
@@ -104,10 +109,7 @@ export const featureDbServiceTemplate = (featureName: string, featureNameUpper: 
         @InjectModel(${featureNameUpper})
         private readonly domainModal: ReturnModelType<typeof ${featureNameUpper}>,
       ) {}
-
       ${body}
-
-
     }
 
 
