@@ -1,12 +1,14 @@
 {
-  "name": "custom_schematics",
-  "version": "0.0.0",
-  "description": "A blank schematics",
+  "name": "kd_schematics",
+  "version": "1.0.0",
+  "description": "A Nest Mongo Rest Endpoint generator",
   "scripts": {
-    "build": "tsc -p tsconfig.json",
     "build:watch": "tsc -p tsconfig.json --watch",
+    "build": "tsc -p tsconfig.schematics.json && cpx src/**/{collection.json,schema.json,files/**} dist/schematics",
+
     "test": "npm run build && jasmine src/**/*_spec.js",
     "schematics": "./node_modules/.bin/schematics"
+
   },
   "keywords": [
     "schematics"

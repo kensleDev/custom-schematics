@@ -1,20 +1,23 @@
-
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.featureControllerTemplate = (featureName, featureNameUpper) => {
+    return `
     import { Controller, Get, Post, Body, Put, Res, Query, NotFoundException, HttpStatus, Delete, Param } from '@nestjs/common';
-    import { Test } from './test';
-    import { TestDbService } from './test.db.service';
+    import { ${featureNameUpper} } from './${featureName}';
+    import { ${featureNameUpper}DbService } from './${featureName}.db.service';
 
-    @Controller('test')
-    export class TestController {
-      constructor(private readonly TestDbS: TestDbService) {}
+    @Controller('${featureName}')
+    export class ${featureNameUpper}Controller {
+      constructor(private readonly ${featureNameUpper}DbS: ${featureNameUpper}DbService) {}
 
       @Get('list')
-      async list(): Promise<Test[] | null> {
-        return await this.TestDbS.list();
+      async list(): Promise<${featureNameUpper}[] | null> {
+        return await this.${featureNameUpper}DbS.list();
       }
 
       @Get('/:id')
       async get(@Res() res, @Param('id') id) {
-        const entry = await this.TestDbS.get(id);
+        const entry = await this.${featureNameUpper}DbS.get(id);
         if (!entry) {
           throw new NotFoundException("Entry does not exist!");
         }
@@ -23,7 +26,7 @@
 
       @Get('/:queryString')
       async query(@Res() res, @Param('queryString') queryString) {
-        const entry = await this.TestDbS.query(queryString);
+        const entry = await this.${featureNameUpper}DbS.query(queryString);
         if (!entry) {
           throw new NotFoundException("Entry does not exist!");
         }
@@ -31,17 +34,17 @@
       }
 
       @Post('create')
-      async create(@Body() test: Test): Promise<Test> {
-        return await this.TestDbS.create(test);
+      async create(@Body() ${featureName}: ${featureNameUpper}): Promise<${featureNameUpper}> {
+        return await this.${featureNameUpper}DbS.create(${featureName});
       }
 
       @Put('/update')
       async update(
         @Res() res,
         @Query('id') id,
-        @Body() endPoint: Test,
+        @Body() endPoint: ${featureNameUpper},
       ) {
-        const entry = await this.TestDbS.update(id, endPoint);
+        const entry = await this.${featureNameUpper}DbS.update(id, endPoint);
         if (!entry) {
           throw new NotFoundException("Entry does not exist!");
         }
@@ -53,7 +56,7 @@
 
       @Delete('/delete')
       async delete(@Res() res, @Query('id') id) {
-        const entry = await this.TestDbS.delete(id);
+        const entry = await this.${featureNameUpper}DbS.delete(id);
         if (!entry) {
           throw new NotFoundException('Entry does not exist');
         }
@@ -65,4 +68,5 @@
     }
 
 
-  
+  `;
+};
